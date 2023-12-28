@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Hospital Management System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Hospital Management System</h1>
+        <a href="#" class="logout" onclick="logOut()">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="left-panel">
+            <h4>Patient Information</h4>
+            <ul>
+                <li><a href="#">Add Patient Record</a></li>
+                <li><a href="#">Update Records</a></li>
+                <li><a href="#">Full History of Patient</a></li>
+                <li><a href="#" onclick="openDoctorsRecords()">Doctors' Records</a></li>
+            </ul>
+
+            <h4>Diagnosis</h4>
+            <ul>
+                <li><a href="#">Add Diagnosis</a></li>
+            </ul>
+
+            <h4>Hospital Info</h4>
+            <ul>
+                <li><a href="#">Hospital Info.</a></li>
+            </ul>
+        </div>
+
+        <div class="right-panel">
+            <h2>Recent Patients</h2>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Diagnosis</th>
+                    <th>Date of Admission</th>
+                    <th>Date of Discharge</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>John Doe</td>
+                    <td>Flu</td>
+                    <td>2023-10-04</td>
+                    <td>2023-10-11</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Jane Smith</td>
+                    <td>Pneumonia</td>
+                    <td>2023-10-10</td>
+                    <td>2023-10-17</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="script2.js"></script>
+<script src="addpatient.js"></script>
+<script src="doctors.js"></script>
+</body>
+</html>
