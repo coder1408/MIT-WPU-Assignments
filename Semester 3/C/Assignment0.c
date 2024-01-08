@@ -10,7 +10,7 @@ struct poly
 
 void create(struct poly *H)
 {
-    
+
     struct poly *temp = H;
     char n = 'y';
 
@@ -69,15 +69,12 @@ void addition(struct poly *H1, struct poly *H2)
     while (t1->exp != -1 || t2->exp != -1)
     {
         temp = (struct poly *)malloc(sizeof(struct poly));
-        
 
         if (t1->exp == t2->exp)
         {
             temp->coeff = t1->coeff + t2->coeff;
             temp->exp = t1->exp;
             t1 = t1->next;
-           
-        
         }
         else if (t1->exp > t2->exp)
         {
@@ -91,7 +88,7 @@ void addition(struct poly *H1, struct poly *H2)
             temp->exp = t2->exp;
             t2 = t2->next;
         }
-        
+
         t2 = t2->next;
         t3->next = temp;
         t3 = temp;
@@ -101,7 +98,6 @@ void addition(struct poly *H1, struct poly *H2)
     printf("Result of addition: ");
     display(H3);
 }
-
 
 int main()
 {
