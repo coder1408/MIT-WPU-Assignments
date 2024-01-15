@@ -100,7 +100,7 @@ void tree::inorder_r(treenode *root)
     if(root != NULL)
     {
         inorder_r(root->left);
-        cout << root->data << " ";
+        cout << root->data << " " << endl;
         inorder_r(root->right);
     }
 }
@@ -113,7 +113,7 @@ void tree::preorder_r(treenode *root)
 {
     if(root != NULL)
     {
-        cout << root->data << " ";
+        cout << root->data << " " << endl;
         preorder_r(root->left);
         preorder_r(root->right);
     }
@@ -129,7 +129,7 @@ void tree::postorder_r(treenode *root)
     {
         postorder_r(root->left);
         postorder_r(root->right);
-        cout << root->data << " ";
+        cout << root->data << " " << endl;
     }
 }
 
