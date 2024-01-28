@@ -1,3 +1,5 @@
+// This code is used to create a binary tree using multiple methods and also makes multiple traversing operations on it
+
 #include <iostream>
 
 using namespace std;
@@ -19,12 +21,29 @@ public:
         root = NULL;
     }
     void create_nr();
+    void create_r(treenode *root);
+    void create_r();
     void inorder_r(treenode *root);
     void inorder_r();
     void preorder_r(treenode *root);
     void preorder_r();
     void postorder_r(treenode *root);
     void postorder_r();
+};
+
+class stack
+{
+    int top;
+    treenode *data[30];
+    public:
+        stack()
+        {
+            top = -1;
+        };
+        void push(treenode *temp);
+        treenode *pop();
+        void isempty();
+        friend class tree;
 };
 
 void tree::create_nr()
@@ -52,8 +71,6 @@ void tree::create_nr()
         curr->right = NULL;
         cout << "Enter data for node: " << endl;
         cin >> curr->data;
-
-        
 
         while (flag == 0)
         {
@@ -91,13 +108,68 @@ void tree::create_nr()
     } while (choice1 == 'y');
 }
 
+void tree::create_r()
+{
+    if (root == NULL)
+    {
+        root = new treenode;
+        cout << "Enter data for root node: " << endl;
+        cin >> root->data;
+        root->left = NULL;
+        root->right = NULL;
+    }
+    create_r(root);
+}
+void tree::create_r(treenode *root)
+{
+    char choice, choice1;
+
+    do
+    {
+        cout << "Do you want to enter data to the left of " << root->data << "? (y or n)" << endl;
+        cin >> choice;
+        if (choice == 'y')
+        {
+            treenode *curr;
+            curr = new treenode;
+            curr->left = NULL;
+            curr->right = NULL;
+
+            cout << "Enter Data:" << endl;
+            cin >> curr->data;
+
+            root->left = curr;
+            create_r(curr);
+        }
+
+        cout << "Do you want to enter data to the right of " << root->data << "? (y or n)" << endl;
+        cin >> choice;
+        if (choice == 'y')
+        {
+            treenode *curr;
+            curr = new treenode;
+            curr->left = NULL;
+            curr->right = NULL;
+
+            cout << "Enter Data:" << endl;
+            cin >> curr->data;
+
+            root->right = curr;
+            create_r(curr);
+            
+        }
+        cout << "Do you want to enter new node? (y or n)" << endl;
+        cin >> choice1;
+    } while (choice1 == 'y');
+}
+
 void tree::inorder_r()
 {
     inorder_r(root);
 }
 void tree::inorder_r(treenode *root)
 {
-    if(root != NULL)
+    if (root != NULL)
     {
         inorder_r(root->left);
         cout << root->data << " " << endl;
@@ -111,7 +183,7 @@ void tree::preorder_r()
 }
 void tree::preorder_r(treenode *root)
 {
-    if(root != NULL)
+    if (root != NULL)
     {
         cout << root->data << " " << endl;
         preorder_r(root->left);
@@ -125,11 +197,19 @@ void tree::postorder_r()
 }
 void tree::postorder_r(treenode *root)
 {
-    if(root != NULL)
+    if (root != NULL)
     {
         postorder_r(root->left);
         postorder_r(root->right);
         cout << root->data << " " << endl;
+    }
+}
+
+void stack::isempty()
+{
+    if(top == -1)
+    {
+        cout << "Stack is empty" << endl;
     }
 }
 
@@ -140,11 +220,12 @@ int main()
     do
     {
         cout << "Enter your choice: " << endl;
-        cout << "1. Create a binary tree" << endl;
+        cout << "1. Create a binary tree (Non-Recursive)" << endl;
         cout << "2. Display the tree in inorder" << endl;
         cout << "3. Display the tree in preorder" << endl;
         cout << "4. Display the tree in postorder" << endl;
-        cout << "5. Exit" << endl;
+        cout << "5. Create a binary tree (Recursive)" << endl;
+        cout << "6. Exit" << endl;
         cin >> choice;
 
         switch (choice)
@@ -162,6 +243,10 @@ int main()
             bt.postorder_r();
             break;
         case '5':
+            bt.create_r();
+            break;
+        case '6':
+            cout << "Exiting..." << endl;
             break;
         default:
             cout << "Invalid choice" << endl;
