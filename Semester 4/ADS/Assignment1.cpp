@@ -3,6 +3,7 @@
 #include <iostream>
 
 using namespace std;
+
 int top;
 class treenode
 {
@@ -220,8 +221,8 @@ treenode *stack::pop()
 }
 void stack::push(treenode *temp)
 {
-    data_stack[top] = temp;
     top++;
+    data_stack[top] = temp;
 }
 
 void tree::inorder_nr()
@@ -238,7 +239,7 @@ void tree::inorder_nr()
             break;
         }
         temp = s.pop();
-        cout << temp->data << " " << endl;
+        std::cout << temp->data << " " << endl;
         temp = temp->right;
     }
 }
@@ -249,7 +250,7 @@ void tree::preorder_nr()
     stack s;
     while (temp != NULL)
     {
-        cout << temp->data << " " << endl;
+        std::cout << temp->data << " " << endl;
         s.push(temp);
         temp = temp->left;
         if (s.isempty() == 1)
@@ -260,21 +261,39 @@ void tree::preorder_nr()
         temp = temp->right;
     }
 }
+
 void tree::postorder_nr()
 {
-    treenode *temp;
-    temp = root;
     stack s;
-    while (temp != NULL)
+    treenode *temp = root;
+    while(1)
     {
-        s.push(temp);
-        temp = temp->left;
+        while (temp != NULL)
+        {
+            s.push(temp);
+            temp = temp->left;
+            
+        }
+        cout << s.data_stack[top]->right;
+        if (s.data_stack[top]->right == NULL)
+        {
+            temp = s.pop();
+            cout << temp->data << " " << endl;
+            
+        }
+        while ( s.isempty() == 0 && s.data_stack[top]->right == temp)
+        {
+            temp = s.pop();
+            cout << temp->data << " " << endl;
+        }
+        
         if (s.isempty() == 1)
         {
             break;
         }
-        temp = s.pop();
-        temp = temp->right;
+
+
+        temp = s.data_stack[top]->right;
     }
 }
 
@@ -314,13 +333,13 @@ int main()
             bt.create_r();
             break;
         case '6':
-            bt.inorder_r();
+            bt.inorder_nr();
             break;
         case '7':
-            bt.preorder_r();
+            bt.preorder_nr();
             break;
         case '8':
-            bt.postorder_r();
+            bt.postorder_nr();
             break;
         case '9':
             cout << "Exiting..." << endl;
