@@ -3,7 +3,7 @@
 #include <iostream>
 
 using namespace std;
-
+int top;
 class treenode
 {
     int data;
@@ -29,12 +29,14 @@ public:
     void preorder_r();
     void postorder_r(treenode *root);
     void postorder_r();
+    void inorder_nr();
+    void preorder_nr();
+    void postorder_nr();
 };
 
 class stack
 {
-    int top;
-    treenode *data[30];
+    treenode *data_stack[30];
     public:
         stack()
         {
@@ -42,7 +44,7 @@ class stack
         };
         void push(treenode *temp);
         treenode *pop();
-        void isempty();
+        int isempty();
         friend class tree;
 };
 
@@ -120,13 +122,12 @@ void tree::create_r()
     }
     create_r(root);
 }
-void tree::create_r(treenode *root)
+void tree::create_r(treenode *temp)
 {
     char choice, choice1;
 
-    do
     {
-        cout << "Do you want to enter data to the left of " << root->data << "? (y or n)" << endl;
+        cout << "Do you want to enter data to the left of " << temp->data << "? (y or n)" << endl;
         cin >> choice;
         if (choice == 'y')
         {
@@ -138,11 +139,11 @@ void tree::create_r(treenode *root)
             cout << "Enter Data:" << endl;
             cin >> curr->data;
 
-            root->left = curr;
+            temp->left = curr;
             create_r(curr);
         }
 
-        cout << "Do you want to enter data to the right of " << root->data << "? (y or n)" << endl;
+        cout << "Do you want to enter data to the right of " << temp->data << "? (y or n)" << endl;
         cin >> choice;
         if (choice == 'y')
         {
@@ -154,13 +155,11 @@ void tree::create_r(treenode *root)
             cout << "Enter Data:" << endl;
             cin >> curr->data;
 
-            root->right = curr;
+            temp->right = curr;
             create_r(curr);
             
         }
-        cout << "Do you want to enter new node? (y or n)" << endl;
-        cin >> choice1;
-    } while (choice1 == 'y');
+    }
 }
 
 void tree::inorder_r()
@@ -205,11 +204,77 @@ void tree::postorder_r(treenode *root)
     }
 }
 
-void stack::isempty()
+int stack::isempty()
 {
     if(top == -1)
+        return 1;
+    else
+        return 0;
+}
+treenode *stack::pop()
+{
+    treenode *temp;
+    temp = data_stack[top];
+    top--;
+    return temp;
+}
+void stack::push(treenode *temp)
+{
+    data_stack[top] = temp;
+    top++;
+}
+
+void tree::inorder_nr()
+{
+    treenode *temp;
+    temp = root;
+    stack s;
+    while (temp != NULL)
     {
-        cout << "Stack is empty" << endl;
+        s.push(temp);
+        temp = temp->left;
+        if (s.isempty() == 1)
+        {
+            break;
+        }
+        temp = s.pop();
+        cout << temp->data << " " << endl;
+        temp = temp->right;
+    }
+}
+void tree::preorder_nr()
+{
+    treenode *temp;
+    temp = root;
+    stack s;
+    while (temp != NULL)
+    {
+        cout << temp->data << " " << endl;
+        s.push(temp);
+        temp = temp->left;
+        if (s.isempty() == 1)
+        {
+            break;
+        }
+        temp = s.pop();
+        temp = temp->right;
+    }
+}
+void tree::postorder_nr()
+{
+    treenode *temp;
+    temp = root;
+    stack s;
+    while (temp != NULL)
+    {
+        s.push(temp);
+        temp = temp->left;
+        if (s.isempty() == 1)
+        {
+            break;
+        }
+        temp = s.pop();
+        temp = temp->right;
     }
 }
 
@@ -225,7 +290,10 @@ int main()
         cout << "3. Display the tree in preorder" << endl;
         cout << "4. Display the tree in postorder" << endl;
         cout << "5. Create a binary tree (Recursive)" << endl;
-        cout << "6. Exit" << endl;
+        cout << "6. Display the tree in inorder recursive" << endl;
+        cout << "7. Display the tree in preorder recursive" << endl;
+        cout << "8. Display the tree in postorder recursive" << endl;
+        cout << "9. Exit" << endl;
         cin >> choice;
 
         switch (choice)
@@ -246,6 +314,15 @@ int main()
             bt.create_r();
             break;
         case '6':
+            bt.inorder_r();
+            break;
+        case '7':
+            bt.preorder_r();
+            break;
+        case '8':
+            bt.postorder_r();
+            break;
+        case '9':
             cout << "Exiting..." << endl;
             break;
         default:
