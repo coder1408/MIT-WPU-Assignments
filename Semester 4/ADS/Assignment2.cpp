@@ -20,7 +20,9 @@ public:
     void create_bst();
     void search();
     int search_r(treenode *temp, int num);
-
+    void search_nr();
+    void depth();
+    int depth_r(treenode *temp);
 };
 
 void tree::create_bst()
@@ -109,6 +111,60 @@ int tree::search_r(treenode *temp, int num)
         return search_r(temp->right, num);
 }
 
+void tree::search_nr()
+{
+    int flag = 0;
+    treenode *temp;
+    temp = root;
+    int num;
+
+    cout <<"Enter number to be searched: " << endl;
+    cin >> num;
+    while(temp != NULL)
+    {
+        if(temp->data == num)
+        {
+            flag = 1;
+            break;
+        }
+        else if(num < temp->data)
+            temp = temp->left;
+        else
+            temp = temp->right;
+        if(flag == 1)
+        {
+            cout << "Number found!" << endl;
+        }
+        else
+        {
+            cout << "Number not found" << endl;
+        }
+    }
+}
+
+void tree::depth()
+{
+    int d = depth_r(root);
+    cout << "Depth of the tree is: " << d << endl;
+}
+int tree::depth_r(treenode *temp)
+{
+    int t1=0, t2=0;
+    if(temp == NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        t1 = depth_r(temp->left);
+        t2 = depth_r(temp->right);
+    }
+    if(t1 > t2)
+        return ++t1;
+    else
+        return ++t2;
+}
+
 int main()
 {
     tree bt;
@@ -116,8 +172,10 @@ int main()
     do
     {
         cout << "1. Create Binary Search Tree" << endl;
-        cout << "2. Search Brinary Tree" << endl;
-        cout << "3. Exit" << endl;
+        cout << "2. Search Brinary Tree (Recursive)" << endl;
+        cout << "3. Search Binary Tree (Non-Recursive)" << endl;
+        cout << "4. Depth of the Tree" << endl; 
+        cout << "5. Exit" << endl;
         cin >> choice;
         switch (choice)
         {
@@ -128,11 +186,17 @@ int main()
             bt.search();
             break;
         case 3:
+            bt.search_nr();
+            break;
+        case 4:
+            bt.depth();
+            break;
+        case 5:
             cout << "Exiting..." << endl;
             break;
         default:
             cout << "Invalid Choice.." << endl;
             break;
         }
-    } while (choice != 2);
+    } while (choice != 5);
 }
