@@ -25,6 +25,7 @@ public:
     void depth();
     int depth_r(treenode *temp);
     void depth_nr();
+    void delete_node();
 };
 
 class stack
@@ -159,7 +160,7 @@ void tree::search_nr()
     cin >> num;
     while(temp != NULL)
     {
-        if(temp->data == num)
+        if (num == temp->data)
         {
             flag = 1;
             break;
@@ -168,14 +169,15 @@ void tree::search_nr()
             temp = temp->left;
         else
             temp = temp->right;
-        if(flag == 1)
-        {
-            cout << "Number found!" << endl;
-        }
-        else
-        {
-            cout << "Number not found" << endl;
-        }
+    }
+    
+    if(flag == 1)
+    {
+        cout << "Number found!" << endl;
+    }
+    else
+    {
+        cout << "Number not found" << endl;
     }
 }
 
@@ -232,6 +234,11 @@ void tree::depth_nr()
     cout << "Depth of the tree is: " << d+1 << endl;
 }
 
+void tree::delete_node()
+{
+    // Not implemented
+}
+
 int main()
 {
     tree bt;
@@ -243,7 +250,8 @@ int main()
         cout << "3. Search Binary Tree (Non-Recursive)" << endl;
         cout << "4. Depth of the Tree (Recursive)" << endl;
         cout << "5. Depth of the Tree (Non-Recursive)" << endl; 
-        cout << "6. Exit" << endl;
+        cout << "6. Delete Node" << endl; // Not implemented
+        cout << "7. Exit" << endl;
         cin >> choice;
         switch (choice)
         {
@@ -263,11 +271,14 @@ int main()
             bt.depth_nr();
             break;
         case 6:
+            bt.delete_node();
+            break;
+        case 7:
             cout << "Exiting..." << endl;
             break;
         default:
             cout << "Invalid Choice.." << endl;
             break;
         }
-    } while (choice != 6);
+    } while (choice != 7);
 }
