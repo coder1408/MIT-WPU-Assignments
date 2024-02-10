@@ -19,6 +19,7 @@ public:
         root = NULL;
     }
     void create_bst();
+    void inorder_nr();
     void search();
     int search_r(treenode *temp, int num);
     void search_nr();
@@ -116,6 +117,25 @@ void tree::create_bst()
         cout << "Do you want to add another node?(y or n)" << endl;
         cin >> choice;
     } while (choice == 'y');
+}
+
+void tree::inorder_nr()
+{
+    treenode *temp;
+    temp = root;
+    stack s;
+    while (temp != NULL)
+    {
+        s.push(temp);
+        temp = temp->left;
+        if (s.isempty() == 1)
+        {
+            break;
+        }
+        temp = s.pop();
+        std::cout << temp->data << " " << endl;
+        temp = temp->right;
+    }
 }
 
 void tree::search()
