@@ -1,10 +1,12 @@
 #include <iostream>
+#include <string>
 using namespace std;
-int top;
 
 class treenode
 {
-    int data;
+public:
+    string word;
+    string meaning;
     treenode *right, *left;
     friend class tree;
 };
@@ -16,61 +18,26 @@ class tree
 public:
     tree()
     {
-        root = NULL;
+        root = nullptr;
     }
-    void create_bst();
-    void inorder_nr();
-    void search();
-    int search_r(treenode *temp, int num);
-    void search_nr();
-    void depth();
-    int depth_r(treenode *temp);
-    void depth_nr();
-    void delete_node();
+    void create_dictionary();
+    void display_dictionary();
+    void search_word();
+    void display_dictionary();
+    void display_dictionary(treenode *temp);
+    string search_word_r(treenode *temp, const string &word);
 };
 
-class stack
-{
-    treenode *data_stack[30];
-    
-public:
-    stack()
-    {
-        top = -1;
-    };
-    void push(treenode *temp);
-    treenode *pop();
-    int isempty();
-    friend class tree;
-};
-
-int stack::isempty()
-{
-    if (top == -1)
-        return 1;
-    else
-        return 0;
-}
-treenode *stack::pop()
-{
-    treenode *temp;
-    temp = data_stack[top];
-    top--;
-    return temp;
-}
-void stack::push(treenode *temp)
-{
-    top++;
-    data_stack[top] = temp;
-}
-
-void tree::create_bst()
+void tree::create_dictionary()
 {
     root = new treenode;
-    cout << "Enter Data for root" << endl;
-    cin >> root->data;
-    root->left = NULL;
-    root->right = NULL;
+    cout << "Enter Word for root" << endl;
+    cin >> root->word;
+    cout << "Enter Meaning for " << root->word << endl;
+    cin.ignore();
+    getline(cin, root->meaning);
+    root->left = nullptr;
+    root->right = nullptr;
 
     char choice = 'y';
     do
@@ -80,33 +47,39 @@ void tree::create_bst()
         int flag = 0;
 
         curr = new treenode;
-        curr->left = NULL;
-        curr->right = NULL;
-        cout << "Enter data: " << endl;
-        cin >> curr->data;
+        curr->left = nullptr;
+        curr->right = nullptr;
+        cout << "Enter Word: " << endl;
+        cin >> curr->word;
 
         while (flag == 0)
         {
-            if(curr->data == temp->data)
+            if (curr->word == temp->word)
             {
-                cout << "Every node in BST should contain a unique value" << endl;
+                cout << "Word already exists in the dictionary." << endl;
                 flag = -1;
                 delete curr;
             }
-            else if (curr->data < temp->data)
+            else if (curr->word < temp->word)
             {
-                if (temp->left == NULL)
+                if (temp->left == nullptr)
                 {
+                    cout << "Enter Meaning for " << curr->word << endl;
+                    cin.ignore();
+                    getline(cin, curr->meaning);
                     temp->left = curr;
                     flag = 1;
                 }
                 else
                     temp = temp->left;
             }
-            else if (curr->data > temp->data)
+            else if (curr->word > temp->word)
             {
-                if (temp->right == NULL)
+                if (temp->right == nullptr)
                 {
+                    cout << "Enter Meaning for " << curr->word << endl;
+                    cin.ignore();
+                    getline(cin, curr->meaning);
                     temp->right = curr;
                     flag = 1;
                 }
@@ -114,191 +87,88 @@ void tree::create_bst()
                     temp = temp->right;
             }
         }
-        cout << "Do you want to add another node?(y or n)" << endl;
+        cout << "Do you want to add another word?(y or n)" << endl;
         cin >> choice;
     } while (choice == 'y');
 }
 
-void tree::inorder_nr()
+void tree::display_dictionary(treenode *temp)
 {
-    treenode *temp;
-    temp = root;
-    stack s;
-    while (temp != NULL)
+    if (temp != nullptr)
     {
-        s.push(temp);
-        temp = temp->left;
-        if (s.isempty() == 1)
-        {
-            break;
-        }
-        temp = s.pop();
-        std::cout << temp->data << " " << endl;
-        temp = temp->right;
+        display_dictionary(temp->left);
+        cout << temp->word << ": " << temp->meaning << endl;
+        display_dictionary(temp->right);
     }
 }
 
-void tree::search()
+void tree::display_dictionary()
+{
+    cout << "Dictionary Entries (Inorder Traversal):" << endl;
+    display_dictionary(root);
+}
+
+void tree::search_word()
 {
     char choice = 'y';
     do
     {
-        int flag = 0;
-        int num;
-        cout << "Enter number to be searched: " << endl;
-        cin >> num;
-        flag = search_r(root, num);
-        if (flag == 1)
-            cout << "Number found!" << endl;
+        string word;
+        cout << "Enter word to be searched: " << endl;
+        cin >> word;
+        string meaning = search_word_r(root, word);
+        if (!meaning.empty())
+            cout << "Meaning: " << meaning << endl;
         else
-            cout << "Number not found" << endl;
-        cout << "Do you want to search another number?" << endl;
+            cout << "Word not found in the dictionary" << endl;
+        cout << "Do you want to search another word?" << endl;
         cin >> choice;
-    }
-    while(choice == 'y');
+    } while (choice == 'y');
 }
-int tree::search_r(treenode *temp, int num)
+
+string tree::search_word_r(treenode *temp, const string &word)
 {
-    if (temp == NULL)
-        return 0; // Not found
-    else if (temp->data == num)
-        return 1; // Found
-    else if (num < temp->data)
-        return search_r(temp->left, num);
+    if (temp == nullptr)
+        return ""; // Not found
+    else if (temp->word == word)
+        return temp->meaning; // Found
+    else if (word < temp->word)
+        return search_word_r(temp->left, word);
     else
-        return search_r(temp->right, num);
-}
-
-void tree::search_nr()
-{
-    int flag = 0;
-    treenode *temp;
-    temp = root;
-    int num;
-
-    cout <<"Enter number to be searched: " << endl;
-    cin >> num;
-    while(temp != NULL)
-    {
-        if (num == temp->data)
-        {
-            flag = 1;
-            break;
-        }
-        else if(num < temp->data)
-            temp = temp->left;
-        else
-            temp = temp->right;
-    }
-    
-    if(flag == 1)
-    {
-        cout << "Number found!" << endl;
-    }
-    else
-    {
-        cout << "Number not found" << endl;
-    }
-}
-
-void tree::depth()
-{
-    int d = depth_r(root);
-    cout << "Depth of the tree is: " << d << endl;
-}
-int tree::depth_r(treenode *temp)
-{
-    int t1=0, t2=0;
-    if(temp == NULL)
-    {
-        return 0;
-    }
-    else
-    {
-        t1 = depth_r(temp->left);
-        t2 = depth_r(temp->right);
-    }
-    if(t1 > t2)
-        return ++t1;
-    else
-        return ++t2;
-}
-
-void tree::depth_nr()
-{
-    stack s;
-    treenode *temp = root;
-    int d = 0;
-
-    while (1)
-    {
-        while (temp != NULL)
-        {
-            s.push(temp);
-            temp = temp->left;
-            if (s.isempty())
-                break;
-            else if (d < top)
-                d = top;
-        }
-
-        if (s.isempty())
-            break;
-        else
-        {
-            temp = s.pop();
-            temp = temp->right;
-        }
-    }
-
-    cout << "Depth of the tree is: " << d+1 << endl;
-}
-
-void tree::delete_node()
-{
-    // Not implemented
+        return search_word_r(temp->right, word);
 }
 
 int main()
 {
-    tree bt;
+    tree dictionary;
     int choice;
     do
     {
-        cout << "1. Create Binary Search Tree" << endl;
-        cout << "2. Search Brinary Tree (Recursive)" << endl;
-        cout << "3. Search Binary Tree (Non-Recursive)" << endl;
-        cout << "4. Depth of the Tree (Recursive)" << endl;
-        cout << "5. Depth of the Tree (Non-Recursive)" << endl; 
-        cout << "6. Delete Node" << endl; // Not implemented
-        cout << "7. Exit" << endl;
+        cout << "1. Create Dictionary" << endl;
+        cout << "2. Search Word" << endl;
+        cout << "3. Display Dictionary" << endl;
+        cout << "4. Exit" << endl;
         cin >> choice;
+
         switch (choice)
         {
         case 1:
-            bt.create_bst();
+            dictionary.create_dictionary();
             break;
         case 2:
-            bt.search();
+            dictionary.search_word();
             break;
         case 3:
-            bt.search_nr();
+            dictionary.display_dictionary();
             break;
         case 4:
-            bt.depth();
-            break;
-        case 5:
-            bt.depth_nr();
-            break;
-        case 6:
-            bt.delete_node();
-            break;
-        case 7:
             cout << "Exiting..." << endl;
             break;
         default:
             cout << "Invalid Choice.." << endl;
             break;
         }
-    } while (choice != 7);
+    } while (choice != 4);
+
+    return 0;
 }
