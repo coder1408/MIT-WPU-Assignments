@@ -14,8 +14,6 @@ public:
     {
         lbit = 0;
         rbit = 0;
-        rightc = nullptr;
-        leftc = nullptr;
     }
 };
 
@@ -49,6 +47,7 @@ void tbt::create()
     root->leftc = head;
     root->rightc = head;
     head->leftc = root;
+    head->lbit = 1;
     head->rightc = head;
 
     do
@@ -109,9 +108,10 @@ void tbt::inorder()
         {
             break;
         }
-        cout << temp->data << " ";
+        cout << temp->data << " " << endl;
     }
 }
+
 tbtnode *tbt::insuccr(tbtnode *temp)
 {
     tbtnode *x;
@@ -132,11 +132,11 @@ void tbt::preorder()
     tbtnode *temp = head->leftc;
     while (temp != head)
     {
-        cout << temp->data << " ";
+        cout << temp->data << " " << endl;
         while (temp->lbit != 0)
         {
             temp = temp->leftc;
-            cout << temp->data << " ";
+            cout << temp->data << " " << endl;
         }
         while (temp->rbit == 0)
         {
