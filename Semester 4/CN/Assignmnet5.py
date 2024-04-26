@@ -1,101 +1,67 @@
-import ipaddress
+class Subnet:
+    def __init__(self,ip,subnets):
+        self.ip = ip
+        self.subnets = subnets
+        self.ip_array=[int(x) for x in self.ip.split('.')]
 
-def get_ip_class(ip_address):
-    """Determines the class of the given IP address (A, B, C, D, or E)."""
-    first_octet = int(ip_address) >> 24  # Extract the first octet using bitwise shift
-    if 0 <= first_octet <= 127:
-        return 'A'
-    elif 128 <= first_octet <= 191:
-        return 'B'
-    elif 192 <= first_octet <= 223:
-        return 'C'
-    elif 224 <= first_octet <= 239:
-        return 'D'
-    else:
-        return 'E'
-
-def get_default_subnet_mask(ip_class):
-    """Returns the default subnet mask for the given IP class."""
-    if ip_class == 'A':
-        return '255.0.0.0'
-    elif ip_class == 'B':
-        return '255.255.0.0'
-    elif ip_class == 'C':
-        return '255.255.255.0'
-    else:
-        return None  # Handle D and E classes appropriately (limited subnetting)
-
-def calculate_subnet_mask(cidr_notation, ip_class):
-    """Calculates the subnet mask based on CIDR notation or uses the default mask for the IP class."""
-    cidr_parts = cidr_notation.strip().split('/')
-    if len(cidr_parts) == 2:
-        prefixlen = int(cidr_parts[1])
-        return ipaddress.netmask(prefixlen=prefixlen).exploded
-    else:
-        return get_default_subnet_mask(ip_class)
-
-def calculate_usable_hosts(prefixlen):
-    """Calculates the number of usable hosts in a subnet based on CIDR prefix length."""
-    return 2 ** (32 - prefixlen) - 2  # Subtract 2 for network and broadcast addresses
-
-def subnet_calculator():
-    """Performs subnetting calculations and displays results."""
-    while True:
-        ip_address = input("Enter IP address (or CIDR notation): ")
-        try:
-            network = ipaddress.ip_interface(ip_address)
-            break
-        except ValueError:
-            print("Invalid IP address or CIDR notation. Please try again.")
-
-    num_subnets = int(input("Enter the number of subnets to be formed: "))
-
-    ip_class = get_ip_class(network.ip)
-    default_subnet_mask = get_default_subnet_mask(ip_class)
-
-    # Handle CIDR notation input or calculate CIDR from default mask (for future enhancements)
-    cidr_notation = network.netmask.exploded
-    new_subnet_mask = calculate_subnet_mask(cidr_notation, ip_class)
-
-    print(f"\nClass of IP: {ip_class}")
-    print(f"Default subnet mask: {default_subnet_mask}")
-
-    # Calculate required bits to borrow for the desired number of subnets
-    bits_to_borrow = int(len(bin(num_subnets - 1)[2:]))
-
-    # Calculate new prefix length based on CIDR and borrowed bits
-    new_prefixlen = network.network.prefixlen + bits_to_borrow
-    if new_prefixlen > 32:
-        print("Error: The requested number of subnets cannot be created with the given IP address.")
-        return
-
-    usable_hosts_per_subnet = calculate_usable_hosts(new_prefixlen)
-
-    print(f"\nNew subnet mask: {new_subnet_mask}")
-    print(f"Usable hosts per subnet: {usable_hosts_per_subnet}")
-
-    # Iterate through each subnet and calculate network address, broadcast address, and IP range
-    for i in range(num_subnets):
-        subnet_network = network.network.network_address + i * (2 ** (32 - new_prefixlen))
-        subnet_broadcast = subnet_network + (2 ** (32 - new_prefixlen)) - 1
-        first_usable_ip = subnet_network + 1
-        last_usable_ip = subnet_broadcast - 1
-
-        print(f"\nSubnet {i + 1}:")
-        print(f"  Network address: {subnet_network}")
-        print(f"  Broadcast address: {subnet_broadcast}")
-        print(f"  IP range: {first_usable_ip} - {last_usable_ip}")
-
-    # Prompt the user to choose an option
-    while True:
-        option = input("\nDo you want to calculate another subnet? (Y/N): ")
-        if option.upper() == 'Y':
-            subnet_calculator()
-        elif option.upper() == 'N':
-            print("Exiting subnet calculator.")
-            break
+    def ip_class(self):
+        if self.ip_array[0] < 128:
+            print("Class A")
+        elif self.ip_array[0] <191:
+            print("Class B")
+        elif self.ip_array[0]< 223:
+            print("Class C")
+        elif self.ip_array[0] <239:
+            print("Class D")
+        elif self.ip_array[0] <255:
+            print("Class E")
         else:
-            print("Invalid option. Please try again.")
+            print("Invalid IP")
+    
+    def ip_size(self):
+        if self.ip_array[0] < 128:
+            size=256*256*256
+        elif self.ip_array[0] <191:
+            size=256*256
+        elif self.ip_array[0]< 223:
+            size=256
+        print("Size of IP is: ",size)
+           
+    def default_subnet(self):
+        if self.ip_array[0] < 128:
+            print("Subnet: 255.0.0.0")
+        elif self.ip_array[0] <191:
+            print("Subnet: 255.255.0.0")
+        elif self.ip_array[0]< 223:
+            print("Subnet: 255.255.255.0")
+        else:
+            print("Invalid IP")
+    def new_subnet_mask(self,subnets):
+        if self.ip_array[0] < 128:
+            subnet_size=266 - (256 // subnets)
+            print(f"New Subnet Mask: 255.{subnet_size}.0.0")
+        elif self.ip_array[0] <191:
+            subnet_size=266 - (256 // subnets)
+            print(f"New Subnet Mask: 255.255.{subnet_size}.0")  
+        elif self.ip_array[0] <223:
+            subnet_size=266 - (256 // subnets)
+            print(f"New Subnet Mask : 255.255.255.{subnet_size}")
+        else:
+            print("Invalid IP")
 
-if __name__ == "__main__":
-    subnet_calculator()
+
+    def print_ips(self):
+        subnet_size=256 // self.subnets
+        for i in range(self.subnets):
+            start_ip=i*subnet_size
+            end_ip  =(i+1)*subnet_size -1
+            print(f"Subnet {i+1} IP RANGE: {self.ip_array[0]}.{self.ip_array[1]}.{self.ip_array[2]}.{start_ip} - {self.ip_array[0]}.{self.ip_array[1]}.{self.ip_array[2]}.{end_ip}")
+
+ip = input("Enter IP: ")
+subnets = int(input("Enter number of subnets: "))
+subnet=Subnet(ip,subnets)
+subnet.ip_class()
+subnet.new_subnet_mask(subnets)
+subnet.ip_size()
+subnet.default_subnet()
+subnet.print_ips()
