@@ -1,7 +1,6 @@
 .header {
     display: flex;
-    height: 150px;
-    position: fixed;
+    height: 100px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -9,14 +8,12 @@
     top: 0;
     left: 0;
     right: 0;
-    background-color: lightgreen;
-    border-bottom: 2px solid black;
-    box-shadow: ;
+    background-color: transparent;
 }
 
 .name {
     cursor: pointer;
-    color: black;
+    color: white;
     font-weight: bold;
     font-size: 40px;
 }
@@ -28,37 +25,19 @@
 }
 
 .nav-item {
-    color: black;
+    color: white;
     font-size: 20px;
-    padding: 10px;
-}
-
-.contact,
-.projects,
-.resume{
+    margin-right: 10px;
     cursor: pointer;
-    transition: text-decoration 0.3s
+    transition: text-decoration 0.3s;
 }
 
-.contact{
-    margin-right: 5px;
-}
-
-.resume{
-    margin-right: 5px;
-}
-
-.resume:hover,
-.projects:hover,
-.contact:hover{
+.nav-item:hover {
     text-decoration: underline;
 }
 
-.email-icon img, .linkdin-icon img {
+.email-icon img,
+.linkedin-icon img {
     height: 25px;
-    cursor: pointer;
 }
 
-.email-icon{
-    margin-right: 5px;
-}
