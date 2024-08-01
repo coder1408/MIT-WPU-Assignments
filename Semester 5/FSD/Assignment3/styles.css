@@ -55,7 +55,7 @@ button:hover {
     font-size: 0.9em;
 }
 
-.image-section, .text-node-section, .delete-node-section {
+.image-section, .text-node-section, .delete-node-section, .jquery-operations {
     margin-top: 20px;
 }
 

@@ -2,55 +2,51 @@ function validateForm() {
   let isValid = true;
 
   // Clear previous error messages
-  document.getElementById("usernameError").innerText = "";
-  document.getElementById("emailError").innerText = "";
-  document.getElementById("phoneError").innerText = "";
-  document.getElementById("passwordError").innerText = "";
-  document.getElementById("confirmPasswordError").innerText = "";
+  $("#usernameError").text("");
+  $("#emailError").text("");
+  $("#phoneError").text("");
+  $("#passwordError").text("");
+  $("#confirmPasswordError").text("");
 
   // Get form values
-  const username = document.getElementById("username").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const confirmPassword = document
-    .getElementById("confirmPassword")
-    .value.trim();
+  const username = $("#username").val().trim();
+  const email = $("#email").val().trim();
+  const phone = $("#phone").val().trim();
+  const password = $("#password").val().trim();
+  const confirmPassword = $("#confirmPassword").val().trim();
 
   // Validate username
   if (username === "") {
-    document.getElementById("usernameError").innerText = "Username is required";
+    $("#usernameError").text("Username is required");
     isValid = false;
   }
 
   // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,3}$/;
   if (email === "" || !emailRegex.test(email)) {
-    document.getElementById("emailError").innerText =
-      "Enter a valid email address";
+    $("#emailError").text("Enter a valid email address");
     isValid = false;
   }
 
   // Validate phone
   const phoneRegex = /^\d{10}$/;
   if (phone === "" || !phoneRegex.test(phone)) {
-    document.getElementById("phoneError").innerText =
-      "Enter a valid 10-digit phone number";
+    $("#phoneError").text("Enter a valid 10-digit phone number");
     isValid = false;
   }
 
   // Validate password
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[&$#@]).{7,}$/;
   if (password === "" || !passwordRegex.test(password)) {
-    document.getElementById("passwordError").innerText =
-      "Password must be at least 7 characters long and contain at least one capital letter, one digit, and one special character (&, $, #, @)";
+    $("#passwordError").text(
+      "Password must be at least 7 characters long and contain at least one capital letter, one digit, and one special character (&, $, #, @)"
+    );
     isValid = false;
   }
 
   // Validate confirm password
   if (confirmPassword === "" || confirmPassword !== password) {
-    document.getElementById("confirmPasswordError").innerText =
-      "Passwords do not match";
+    $("#confirmPasswordError").text("Passwords do not match");
     isValid = false;
   }
 
@@ -59,21 +55,51 @@ function validateForm() {
 
 // Change image source
 function changeImage() {
-  const image = document.getElementById("myImage");
-  image.src = image.src.includes("image1.jpeg") ? "image2.jpeg" : "image1.jpeg";
+  const image = $("#myImage");
+  image.attr(
+    "src",
+    image.attr("src").includes("image1.jpeg") ? "image2.jpeg" : "image1.jpeg"
+  );
 }
 
 // Add a text node to a parent node
 function addTextNode() {
-  const parentNode = document.getElementById("parentNode");
   const newText = document.createTextNode("This is a new text node.");
-  parentNode.appendChild(newText);
+  $("#parentNode").append(newText);
 }
 
 // Delete a node
 function deleteNode() {
-  const nodeToDelete = document.getElementById("nodeToDelete");
-  if (nodeToDelete) {
-    nodeToDelete.remove();
-  }
+  $("#nodeToDelete").remove();
 }
+
+// jQuery operations
+$(document).ready(function () {
+  // Change button text
+  $("#changeTextButton").click(function () {
+    $(this).text("Button Text Changed");
+  });
+
+  // Set background image using jQuery CSS property
+  $("#setBackgroundButton").click(function () {
+    $("body").css("background-image", "url('background.jpg')");
+  });
+
+  // Access HTML form data using jQuery
+  $("#accessFormDataButton").click(function () {
+    const formData = {
+      username: $("#username").val(),
+      email: $("#email").val(),
+      phone: $("#phone").val(),
+      password: $("#password").val(),
+      confirmPassword: $("#confirmPassword").val(),
+    };
+    console.log(formData);
+    alert(JSON.stringify(formData));
+  });
+
+  // Add attribute using jQuery
+  $("#addAttributeButton").click(function () {
+    $("input").attr("placeholder", "Enter value");
+  });
+});
