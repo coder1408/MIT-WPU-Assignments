@@ -11,6 +11,5 @@ def md5_hash(data):
     return md5.hexdigest()
 
 data = input("Enter data to be hashed: ")
-data = "Hello, World!"
 print(f"SHA-1 Hash: {sha1_hash(data)}")
 print(f"MD5 Hash: {md5_hash(data)}")
