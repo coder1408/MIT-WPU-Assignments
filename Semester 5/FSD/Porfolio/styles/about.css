@@ -12,6 +12,7 @@
   width: 275px; /* Adjust size as needed */
   height: auto;
   border-radius: 50%; /* Makes the image circular */
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5); /* Adds a shadow effect */
 }
 
 .about-me-text {

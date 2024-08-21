@@ -19,3 +19,11 @@ p {
     height: 100%;
     margin: 50px 0 0 200px;
 }
+
+.intro-image {
+    margin-left: 900px ;
+    width: 700px;
+    margin-top: -300px;
+    border-radius: 25px;
+    box-shadow: 50px 50px 50px rgba(0, 0, 0, 0.5);
+}
