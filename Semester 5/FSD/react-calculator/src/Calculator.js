@@ -1,9 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Calculator.css";
 
 const Calculator = () => {
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
+
+  // Keyboard support
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const { key } = event;
+      if (key >= "0" && key <= "9") {
+        handleClick(key);
+      } else if (key === "+" || key === "-" || key === "*" || key === "/") {
+        handleClick(key);
+      } else if (key === "Enter") {
+        handleEqual();
+      } else if (key === "Backspace") {
+        handleBackspace();
+      } else if (key === "Escape") {
+        handleClear();
+      } else if (key === ".") {
+        handleClick(".");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [input]);
 
   const handleClick = (value) => {
     setInput((prev) => prev + value);
