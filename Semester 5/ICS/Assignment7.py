@@ -3,26 +3,24 @@ from Crypto.Signature.pkcs1_15 import PKCS115_SigScheme
 from Crypto.Hash import SHA256
 import binascii
 
+# Generate RSA key pair
 keyPair = RSA.generate(bits=1024)
 pubKey = keyPair.publickey()
 
-msg = b'A message for signing'
-hash = SHA256.new(msg)
+# Take input from the user for the message to sign
+msg_to_sign = input("Enter the message to sign: ").encode()
+
+# Sign the message
+hash = SHA256.new(msg_to_sign)
 signer = PKCS115_SigScheme(keyPair)
 signature = signer.sign(hash)
 print("Signature:", binascii.hexlify(signature))
 
-msg = b'A message for signing'
-hash = SHA256.new(msg)
-verifier = PKCS115_SigScheme(pubKey)
-try:
-    verifier.verify(hash, signature)
-    print("Signature is valid.")
-except:
-    print("Signature is invalid.")
+# Take input from the user for the message to verify
+msg_to_verify = input("Enter the message to verify: ").encode()
 
-msg = b'A tampered message'
-hash = SHA256.new(msg)
+# Verify the signature
+hash = SHA256.new(msg_to_verify)
 verifier = PKCS115_SigScheme(pubKey)
 try:
     verifier.verify(hash, signature)
