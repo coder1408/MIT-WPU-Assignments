@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+react-formval/node_modules
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+
+# Build directories
+dist/
+build/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Package lock files (if you don't want to commit them)
+# npm
+package-lock.json
+# yarn
+yarn.lock
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project

@@ -16,6 +16,14 @@ const Calculator = () => {
       } else if (event.key === "Escape") {
         handleClear();
       } else {
+        // Prevent multiple operators being added consecutively (optional enhancement)
+        const operators = ["+", "-", "*", "/"];
+        if (
+          operators.includes(event.key) &&
+          operators.includes(input[input.length - 1])
+        ) {
+          return;
+        }
         setInput((prev) => prev + event.key);
       }
     };
@@ -42,7 +50,11 @@ const Calculator = () => {
 
   const handleEqual = () => {
     try {
-      setResult(eval(input).toString());
+      if (input.includes("/0")) {
+        setResult("Error"); // Prevent division by zero
+      } else {
+        setResult(eval(input).toString());
+      }
     } catch (err) {
       setResult("Error");
     }

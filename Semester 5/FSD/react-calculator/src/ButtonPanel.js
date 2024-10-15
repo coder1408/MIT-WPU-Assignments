@@ -21,6 +21,7 @@ const ButtonPanel = ({
     <Button value="9" onClick={handleClick} />
     <Button value="*" onClick={handleClick} />
     <Button value="0" onClick={handleClick} />
+    <Button value="/" onClick={handleClick} /> {/* Division button added */}
     <Button value="C" onClick={handleClear} />
     <Button value="←" onClick={handleBackspace} />
     <Button value="=" onClick={handleEqual} />
