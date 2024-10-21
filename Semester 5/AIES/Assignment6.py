@@ -8,7 +8,7 @@ import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 
-nltk.download('punkt_tab', quiet=True)
+nltk.download('punkt', quiet=True)
 article = Article("https://www.mayoclinic.org/diseases-conditions/chronic-kidney-disease/symptoms-causes/syc-20354521")
 
 article.download()

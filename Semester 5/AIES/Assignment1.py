@@ -50,7 +50,7 @@ class Puzzle:
 
     def accept(self):
         puz = []
-        for i in range(0,self.n):
+        for _ in range(self.n):
             temp = input().split(" ")
             puz.append(temp)
         return puz
