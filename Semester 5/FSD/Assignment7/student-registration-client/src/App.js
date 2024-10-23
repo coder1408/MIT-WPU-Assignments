@@ -11,50 +11,68 @@ const App = () => {
     password: "",
     contactNumber: "",
   });
-  const [isEdit, setIsEdit] = useState(false); // Track if updating
+  const [isEdit, setIsEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchStudents();
   }, []);
 
-  // Fetch Students
   const fetchStudents = async () => {
-    const response = await axios.get("http://localhost:5000/api/students");
-    setStudents(response.data);
+    setLoading(true);
+    try {
+      const response = await axios.get("http://localhost:5000/api/students");
+      setStudents(response.data);
+    } catch (err) {
+      setError("Error fetching students");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Handle Input Change
   const handleChange = (e) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
 
-  // Add or Update Student
   const handleSubmit = async () => {
-    if (isEdit) {
-      await axios.put(
-        `http://localhost:5000/api/students/${student.rollNo}`,
-        student
-      );
-    } else {
-      await axios.post("http://localhost:5000/api/students", student);
+    setLoading(true);
+    setError("");
+    try {
+      if (isEdit) {
+        await axios.put(
+          `http://localhost:5000/api/students/${student.rollNo}`,
+          student
+        );
+      } else {
+        await axios.post("http://localhost:5000/api/students", student);
+      }
+      fetchStudents();
+      resetForm();
+    } catch (err) {
+      setError("Error saving student data");
+    } finally {
+      setLoading(false);
     }
-    fetchStudents();
-    resetForm();
   };
 
-  // Edit Student
   const editStudent = (stud) => {
     setStudent(stud);
     setIsEdit(true);
   };
 
-  // Delete Student
   const deleteStudent = async (rollNo) => {
-    await axios.delete(`http://localhost:5000/api/students/${rollNo}`);
-    fetchStudents();
+    setLoading(true);
+    try {
+      await axios.delete(`http://localhost:5000/api/students/${rollNo}`);
+      fetchStudents();
+    } catch (err) {
+      setError("Error deleting student");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Reset form after submission
   const resetForm = () => {
     setStudent({
       firstName: "",
@@ -69,6 +87,7 @@ const App = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.header}>Student Registration System</h2>
+      {error && <p style={styles.error}>{error}</p>}
       <form style={styles.form}>
         <input
           type="text"
@@ -121,39 +140,48 @@ const App = () => {
         )}
       </form>
 
-      <h3 style={styles.header}>Student List</h3>
-      <table border="1" style={styles.table}>
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Roll No</th>
-            <th>Contact Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((stud) => (
-            <tr key={stud.rollNo}>
-              <td>{stud.firstName}</td>
-              <td>{stud.lastName}</td>
-              <td>{stud.rollNo}</td>
-              <td>{stud.contactNumber}</td>
-              <td>
-                <button
-                  onClick={() => deleteStudent(stud.rollNo)}
-                  style={styles.button}
-                >
-                  Delete
-                </button>
-                <button onClick={() => editStudent(stud)} style={styles.button}>
-                  Edit
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h3 style={styles.header}>Student List</h3>
+          <table border="1" style={styles.table}>
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Roll No</th>
+                <th>Contact Number</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map((stud) => (
+                <tr key={stud.rollNo}>
+                  <td>{stud.firstName}</td>
+                  <td>{stud.lastName}</td>
+                  <td>{stud.rollNo}</td>
+                  <td>{stud.contactNumber}</td>
+                  <td>
+                    <button
+                      onClick={() => deleteStudent(stud.rollNo)}
+                      style={styles.button}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => editStudent(stud)}
+                      style={styles.button}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };
@@ -187,6 +215,9 @@ const styles = {
   table: {
     width: "100%",
     textAlign: "left",
+  },
+  error: {
+    color: "red",
   },
 };
 
