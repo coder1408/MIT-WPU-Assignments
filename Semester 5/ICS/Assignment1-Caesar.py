@@ -5,7 +5,7 @@ def caesar_cipher_encrypt(plaintext, shift):
     
     for char in plaintext:
         if char.isalpha():
-            shift_amount = shift % 26  # Ensure the shift is within the range of 0-25
+            shift_amount = shift % 5  # Ensure the shift is within the range of 0-25
             if char.islower():
                 encrypted_char = chr((ord(char) - ord('a') + shift_amount) % 26 + ord('a'))
             else:

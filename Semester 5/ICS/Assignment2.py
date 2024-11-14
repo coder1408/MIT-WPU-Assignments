@@ -41,7 +41,7 @@ def hex_to_text(hex_num):
 
 # Get input from the user
 plaintext_text = input("Enter the plaintext in English: ")
-plaintext = text_to_hex(plaintext_text[:2])  # Only using the first 2 characters for simplicity
+plaintext = text_to_hex(plaintext_text[:200])  # Only using the first 2 characters for simplicity
 rounds = int(input("Enter the number of rounds: "))
 key = int(input("Enter the key (as an 8-bit hexadecimal number, e.g., 0x3F): "), 16)
 
@@ -51,7 +51,7 @@ decrypted = feistel_decrypt(ciphertext, rounds, key)
 decrypted_text = hex_to_text(decrypted)
 
 # Print the results
-print(f"Plaintext: {plaintext_text[:2]}")
+print(f"Plaintext: {plaintext_text[:200]}")
 print(f"Plaintext (hex): 0x{plaintext:04X}")
 print(f"Ciphertext: 0x{ciphertext:04X}")
 print(f"Decrypted (hex): 0x{decrypted:04X}")
